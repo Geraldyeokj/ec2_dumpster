@@ -11,6 +11,9 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('liquidmagic')
     .build();
+
+  app.setGlobalPrefix('api/v1');
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
