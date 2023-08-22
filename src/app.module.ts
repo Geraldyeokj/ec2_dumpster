@@ -6,6 +6,8 @@ import { DatabaseModule } from './core/database/database.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { PostsModule } from './modules/posts/posts.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CronModule } from './modules/cron/cron.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { PostsModule } from './modules/posts/posts.module';
     UsersModule,
     AuthModule,
     PostsModule,
+    ScheduleModule.forRoot(),
+    CronModule
   ],
   controllers: [AppController],
   providers: [AppService],
