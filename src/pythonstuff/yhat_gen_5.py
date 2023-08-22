@@ -8,6 +8,17 @@ from sklearn.metrics import r2_score
 from datetime import datetime
 import scipy
 
+# Importing the module
+import os
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+# Getting the current working directory
+cwd = os.getcwd()
+
+# Printing the current working directory
+print("Th Current working directory is: {0}".format(cwd))
+
 
 df = pd.read_csv('test_input.csv')
 actual_time_buffer = df["ds"]
@@ -62,16 +73,11 @@ max_merged = -1
 merged_dict = {}
 max_forecast = -1
 
-previous_period = 350
-with open('p_current.txt') as f:
-    previous_period = int(f.read())
-    print("previous_period", previous_period)
-
 for p in range(estimated_period - 100, estimated_period + 100, 10):
     print(f"Testing period {p}")
     m = Prophet(weekly_seasonality = False, yearly_seasonality = False).add_seasonality(name='gassy', period=p, fourier_order = 10, prior_scale=0.1)
     m.fit(df)
-    future = m.make_future_dataframe(periods=700)
+    future = m.make_future_dataframe(periods=720)
     future.tail()
     forecast = m.predict(future)
     forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail()
@@ -95,7 +101,7 @@ print(max_forecast.tail())
 now_ind = len(actual_time_buffer)
 now_date = max_merged["ds"][now_ind - 1]
 for i in range(0, len(max_merged)):
-    max_merged["ds"][i] = (max_merged["ds"][i] - now_date) / np.timedelta64(1, 'D')
+    max_merged["ds"][i] = ((max_merged["ds"][i] - now_date) / np.timedelta64(1, 'D')) / 60
 
 print(max_merged.head())
 print(max_merged.tail())
@@ -124,7 +130,7 @@ text_file.close()
 
 plt.figure(figsize=(15,7))
 plt.suptitle(f"ETH Gas Prices Over Time (period {max_period}, r2 = {round(max_r2, 2)})", fontsize=17)
-plt.xlabel('Time / Minutes')
+plt.xlabel('Time / Hours')
 plt.ylabel('Gas Price / Gwei')
 plt.plot(max_merged["ds"], max_merged["y"], color='#D22A0D', label='Actual')
 plt.plot(max_merged["ds"], max_merged["yhat"], color='#379BDB', label='Predicted')
