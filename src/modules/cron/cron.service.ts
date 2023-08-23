@@ -42,7 +42,7 @@ export class CronService {
     @Cron('45 * * * * *')
     getYhat() {
         this.logger.debug('Called when the current second is 45');
-        console.log("I'm updating yhat", __dirname)
+        console.log("I'm updating yhat", __dirname, path.resolve(__dirname, "../../../"))
         const python = spawn('python', ["src/pythonstuff/yhat_gen_5.py"], {
             cwd: path.resolve(__dirname, "../../../")
         });
@@ -67,7 +67,7 @@ export class CronService {
     @Cron('15 * * * * *')
     getGasPrice15() {
         this.logger.debug('Called when the current second is 15');
-        console.log("I'm getting gas price", __dirname)
+        console.log("I'm getting gas price", __dirname, path.resolve(__dirname, "../../../"))
         const spawn = require("child_process").spawn;
         const process = spawn('python', ["src/pythonstuff/index2.py"], {
             cwd: path.resolve(__dirname, "../../../")
