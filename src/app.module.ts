@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { PostsModule } from './modules/posts/posts.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CronModule } from './modules/cron/cron.module';
+import { PredictionsModule } from './modules/predictions/predictions.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { CronModule } from './modules/cron/cron.module';
     AuthModule,
     PostsModule,
     ScheduleModule.forRoot(),
-    CronModule
+    CronModule,
+    PredictionsModule
   ],
   controllers: [AppController],
   providers: [AppService],
