@@ -41,7 +41,7 @@ export class CronService {
     @Cron('45 * * * * *')
     getYhat() {
         this.logger.debug('Called when the current second is 45');
-        console.log("I'm getting gas price")
+        console.log("I'm updating yhat")
         const python = spawn('python', ["src/pythonstuff/yhat_gen_5.py"] );
         python.stdout.on('data', (data) => {
             console.log('pattern: ', data.toString());

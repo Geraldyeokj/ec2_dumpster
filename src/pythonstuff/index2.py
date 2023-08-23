@@ -15,7 +15,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 cwd = os.getcwd()
 
 # Printing the current working directory
-print("Th Current working directory is: {0}".format(cwd))
+print("The Current working directory is: {0}".format(cwd))
 
 def csv_appender(csv_name, row):
     df = pd.read_csv(csv_name)

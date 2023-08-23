@@ -21,6 +21,8 @@ print("Th Current working directory is: {0}".format(cwd))
 
 
 df = pd.read_csv('test_input.csv')
+if len(df) > 3600:
+    df = df[0: 3600]
 actual_time_buffer = df["ds"]
 # Will fail if df longer than 2.5 days ish
 
