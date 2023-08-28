@@ -17,10 +17,14 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 cwd = os.getcwd()
 
 # Printing the current working directory
-print("Th Current working directory is: {0}".format(cwd))
+# print("The Current working directory is: {0}".format(cwd))
 
 
 df = pd.read_csv('test_input.csv')
+
+print("Size of test_input.csv:", len(df))
+
+
 if len(df) > 3600:
     df = df[0: 3600]
 actual_time_buffer = df["ds"]
@@ -36,8 +40,11 @@ peaks, props = scipy.signal.find_peaks(yfilt, distance=0.35*fs, height=0.0)
 # find peaks in noisy signal using wavelet decomposition
 cwt_peaks = scipy.signal.find_peaks_cwt(yraw, widths=np.arange(5, 15))
 
-print("peaks", peaks)
-print("cwt_peaks", cwt_peaks)
+# print("peaks", peaks)
+# print("cwt_peaks", cwt_peaks)
+
+print("Number of Peaks:", peaks, "Peaks:", peaks)
+
 
 
 # need to add functionality for when there is a gap in info
@@ -60,14 +67,14 @@ df['ds'] = pd.to_datetime(df['ds'])
 total_diff = 0
 for i in range(1, len(peaks)):
     day_diff = (df["ds"][peaks[i]] - df["ds"][peaks[i - 1]]) / np.timedelta64(1, 'D')
-    print("day diff:", day_diff, df["ds"][peaks[i]], df["ds"][peaks[i - 1]])
+    #print("day diff:", day_diff, df["ds"][peaks[i]], df["ds"][peaks[i - 1]])
     total_diff += day_diff
 estimated_period = int(round(total_diff / (len(peaks) - 1)))
 
-print("ESTIMATED PERIOD:", estimated_period)
+#print("ESTIMATED PERIOD:", estimated_period)
 
-print(df.head())
-print(df.tail())
+print("df head:", df.head())
+print("df tail:", df.tail())
 
 max_r2 = -1
 max_period = -1
@@ -76,7 +83,7 @@ merged_dict = {}
 max_forecast = -1
 
 for p in range(estimated_period - 100, estimated_period + 100, 10):
-    print(f"Testing period {p}")
+    # print(f"Testing period {p}")
     m = Prophet(weekly_seasonality = False, yearly_seasonality = False).add_seasonality(name='gassy', period=p, fourier_order = 10, prior_scale=0.1)
     m.fit(df)
     future = m.make_future_dataframe(periods=720)
@@ -86,7 +93,7 @@ for p in range(estimated_period - 100, estimated_period + 100, 10):
     merged = forecast.merge(df, on="ds", how = 'outer')
     r2_merged = forecast.merge(df, on="ds", how = 'inner')
     r2 = r2_score(r2_merged["y"], r2_merged["yhat"])
-    print("r2 score", r2, "max_r2", max_r2)
+    # print("r2 score", r2, "max_r2", max_r2)
     if r2 > max_r2:
         max_r2 = r2
         max_period = p
@@ -95,18 +102,18 @@ for p in range(estimated_period - 100, estimated_period + 100, 10):
 
 
 # Python
-print("plotting forecast")
+#print("plotting forecast")
 fig1 = m.plot(max_forecast)
-print(max_forecast.head())
-print(max_forecast.tail())
+#print(max_forecast.head())
+#print(max_forecast.tail())
 
 now_ind = len(actual_time_buffer)
 now_date = max_merged["ds"][now_ind - 1]
 for i in range(0, len(max_merged)):
     max_merged["ds"][i] = ((max_merged["ds"][i] - now_date) / np.timedelta64(1, 'D')) / 60
 
-print(max_merged.head())
-print(max_merged.tail())
+print("max_merged head:", max_merged.head())
+print("max_merged tail:", max_merged.tail())
 """
 # now ind shoule be len() since it is not considered in actual time buffer
 now_ind = len(actual_time_buffer)
