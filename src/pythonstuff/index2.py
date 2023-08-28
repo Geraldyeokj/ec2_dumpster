@@ -15,14 +15,14 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 cwd = os.getcwd()
 
 # Printing the current working directory
-print("The Current working directory is: {0}".format(cwd))
+# print("The Current working directory is: {0}".format(cwd))
 
 def csv_appender(csv_name, row):
     df = pd.read_csv(csv_name)
 
-    print("row", row)
+    print("inserting row:", row)
     df_extended = pd.DataFrame([row], columns=['ds', 'y'])
-    print("df_extended", df_extended)
+    # print("df_extended", df_extended)
     if len(df) >= 3600:
         df = df[1:]
     df2 = pd.concat([df, df_extended])
@@ -30,10 +30,10 @@ def csv_appender(csv_name, row):
 
 def update_queue():
     gas_info = gas_getter()
-    print(gas_info)
+    # print(gas_info)
     safe_gas_price = gas_info["result"]["SafeGasPrice"]
     utc_time = datetime.now(timezone.utc).timestamp() * 1000
-    print(safe_gas_price)
+    print("gas price:", safe_gas_price)
     csv_appender("./test_input.csv", [str(round(float(utc_time))), str(round(float(safe_gas_price)))])
 
 update_queue()
