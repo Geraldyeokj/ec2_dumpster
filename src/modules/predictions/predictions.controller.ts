@@ -25,4 +25,19 @@ export class PredictionsController {
     coord_arr.pop()
     return coord_arr;
   }
+
+  @Get('actual')
+  async actual() {
+    this.logger.log('Retreiving actual');
+    let coord_arr = [];
+    const csv_data = fs.readFileSync("./src/pythonstuff/test_input.csv", {encoding: "utf8"});
+    const rows = csv_data.split("\n")
+    rows.forEach(row => {
+      const r = row.split(",")
+      coord_arr.push([r[0], r[r.length - 2], r[r.length -1]])
+    });
+    // last element is null since there is a trailing newline in yhat_current.csv
+    coord_arr.pop()
+    return coord_arr;
+  }
 }
