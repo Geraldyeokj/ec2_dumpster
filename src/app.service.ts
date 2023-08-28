@@ -7,10 +7,4 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
-
-  @Cron('45 * * * * *')
-  handleCron() {
-      this.logger.debug('Called when the current second is 45');
-      console.log("I'm CRONNING IN APP SERVICE")
-  }
 }
