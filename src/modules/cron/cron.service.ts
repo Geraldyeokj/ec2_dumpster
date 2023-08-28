@@ -17,6 +17,11 @@ export class CronService {
             const python = spawn('python3', ["src/pythonstuff/yhat_gen_5.py"], {
                 cwd: path.resolve(__dirname, "../../../")
             });
+
+            setTimeout(() => {
+                python.kill()
+            }, 105*1000, "Yhat child process took too long")
+
             python.stdout.on('data', (data) => {
                 console.log('pattern: ', data.toString());
             });
@@ -47,6 +52,9 @@ export class CronService {
             const process = spawn('python3', ["src/pythonstuff/index2.py"], {
                 cwd: path.resolve(__dirname, "../../../")
             });
+            setTimeout(() => {
+                process.kill()
+            }, 60*1000, "Get gas price took too long")
             process.stdout.on('data', (data) => {
                 console.log('pattern: ', data.toString());
             });
