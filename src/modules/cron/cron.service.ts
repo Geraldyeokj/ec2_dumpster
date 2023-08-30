@@ -102,10 +102,10 @@ export class CronService {
                 process.kill()
                 winstonLogger.log({
                     level: 'warn',
-                    message: 'Killed Gas Price updating process. Took more than 50 seconds.'
+                    message: 'Killed Gas Price updating process. Took more than 30 seconds.'
                 });
-                this.logger.warn('Killed Gas Price updating process. Took more than 50 seconds.');
-            }, 50*1000, "Get gas price took too long")
+                this.logger.warn('Killed Gas Price updating process. Took more than 30 seconds.');
+            }, 30*1000, "Get gas price took too long")
 
             process.stdout.on('data', (data) => {
                 winstonLogger.log({
